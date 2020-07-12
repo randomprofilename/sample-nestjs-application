@@ -1,4 +1,4 @@
-import { Resolver, Args, Mutation } from "@nestjs/graphql";
+import { Resolver, Args, Mutation, Int, ID } from "@nestjs/graphql";
 import { GroupType } from "./group.type";
 import { GroupsService } from "./groups.service";
 import { Query } from "@nestjs/graphql";
@@ -31,19 +31,29 @@ export class GroupResolver {
         return this.groupService.createGroup(createGroupDtoInput);
     }
 
-    @Mutation(returns => GroupType)
-    addUserToGroup(
-        @Args('groupId') groupId: number, 
-        @Args('userId') userId: number 
-    ): Promise<Group> {
-        return this.groupService.addUserToGroup(groupId, userId);
+    @Mutation(returns => Int)
+    async deleteGroup(
+        @Args('id') id: number
+    ): Promise<number> {
+        await this.groupService.deleteGroup(id);
+        return id
     }
 
-    @Mutation(returns => GroupType)
-    deleteUserFromGroup(
+    @Mutation(returns => Int)
+    async addUserToGroup(
         @Args('groupId') groupId: number, 
         @Args('userId') userId: number 
-    ): Promise<Group> {
-        return this.groupService.deleteUserFromGroup(groupId, userId);
+    ): Promise<number> {
+        await this.groupService.addUserToGroup(groupId, userId);
+        return 1;
+    }
+
+    @Mutation(returns => Int)
+    async deleteUserFromGroup(
+        @Args('groupId') groupId: number, 
+        @Args('userId') userId: number 
+    ): Promise<number> {
+        await this.groupService.deleteUserFromGroup(groupId, userId);
+        return 1;
     }
 }

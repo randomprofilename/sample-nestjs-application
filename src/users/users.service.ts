@@ -107,9 +107,12 @@ export class UsersService {
 
     async addFriend(id: number, friendId: number): Promise<void> {
         try {
+            if (id === friendId)
+                throw new ConflictException(`Both ids are equal`);
+
             const [ user, newFriend ] = await Promise.all([
-                this.getUserById(id), 
-                this.getUserById(friendId)]
+                this.getUserById(id, { withFriends: true }), 
+                this.getUserById(friendId, { withFriends: true })]
             );
     
             if (user.isFriendTo(newFriend) && newFriend.isFriendTo(user))
@@ -135,6 +138,9 @@ export class UsersService {
 
     async removeFriend(id: number, friendId: number): Promise<void> {
         try {
+            if (id === friendId)
+                throw new ConflictException(`Both ids are equal`);
+            
             const [ user, friend ] = await Promise.all([
                 this.getUserById(id), 
                 this.getUserById(friendId)]

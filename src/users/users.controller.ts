@@ -52,5 +52,4 @@ export class UsersController {
     ): Promise<void> {
         return this.usersService.removeFriend(id, friendId);
     }
-
 }
