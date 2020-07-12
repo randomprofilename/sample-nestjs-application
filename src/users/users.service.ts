@@ -12,7 +12,7 @@ export class UsersService {
         private userRepository: Repository<User>
     ) {}
 
-    private _getRelationsParameter = ({ withGroups, withFriends }: GetUserFilterDto) => [ 
+    private _getRelationsParameter = ({ withGroups, withFriends }: GetUserFilterDto): string[] => [ 
         withGroups ? "groups" : null,
         withFriends ? "friends" : null 
     ].filter(relation => relation != null);

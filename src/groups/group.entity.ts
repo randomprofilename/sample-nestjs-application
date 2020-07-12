@@ -14,4 +14,12 @@ export class Group extends BaseEntity {
         name: "user_group"
     })
     users: User[];
+
+    removeUser(user: User): boolean {
+        if (!this.users.some(({ id }) => id === user.id)) 
+            return false
+        
+        this.users = this.users.filter(({ id }) => id !== user.id);
+        return true;
+    }
 }

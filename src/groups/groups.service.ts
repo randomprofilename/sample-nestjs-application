@@ -14,7 +14,7 @@ export class GroupsService {
         private usersService: UsersService
     ) {}
 
-    private _getRelationsParameter = ({ withUsers }: GetGroupFilterDto) => [ 
+    private _getRelationsParameter = ({ withUsers }: GetGroupFilterDto): string[] => [ 
         withUsers ? "users" : null
     ].filter(relation => relation != null);
 
@@ -45,13 +45,14 @@ export class GroupsService {
     }
 
     async deleteUserFromGroup(id: number, userId: number): Promise<Group> {
-        const group = await this.getGroupById(id);
-        const user = await this.usersService.getUserById(id);
+        const [ group, user ] = await Promise.all([ 
+            this.getGroupById(id),
+            this.usersService.getUserById(userId)]
+        );
         
-        if (group.users != null)
-            group.users.push(user);
-        else
-            group.users = [ user ];
+        if (!group.removeUser(user))
+            throw new NotFoundException(`User ${user.username} doesn't attached to group`);
+        
         return this.groupRepository.save(group);
     }
 
