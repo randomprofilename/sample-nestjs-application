@@ -5,9 +5,9 @@ import { StringToBoolTransform } from "src/transforms/string-to-bool.transform";
 export class GetUserFilterDto {
     @IsOptional()
     @Transform(StringToBoolTransform)
-    withFriends: boolean;
+    withFriends?: boolean;
 
     @IsOptional()
     @Transform(StringToBoolTransform)
-    withGroups: boolean;
+    withGroups?: boolean;
 }

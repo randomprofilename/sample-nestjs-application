@@ -1,3 +1,3 @@
-export const StringToBoolTransform = (value: string): boolean => {
-    return value === "true"
+export const StringToBoolTransform = (value: string | boolean): boolean => {
+    return value === "true" || value === true
 };

@@ -21,11 +21,10 @@ export class GroupsService {
         withUsers ? "users" : null
     ].filter(relation => relation != null);
 
-    async getGroups(getGroupFilterDto: GetGroupFilterDto): Promise<Group[]> {
+    async getGroups(getGroupFilterDto: GetGroupFilterDto = {}): Promise<Group[]> {
         try {
             const groups = await this.groupRepository.find({ 
-                relations: this._getRelationsParameter(getGroupFilterDto),
-                where: {"asdas": "asdas"}
+                relations: this._getRelationsParameter(getGroupFilterDto)
             });
             return groups;
         } catch (error) {
@@ -41,7 +40,7 @@ export class GroupsService {
         }
     }
 
-    async getGroupById(id: number, getGroupFilterDto?: GetGroupFilterDto): Promise<Group> {
+    async getGroupById(id: number, getGroupFilterDto: GetGroupFilterDto = {}): Promise<Group> {
         try {
             const group = await this.groupRepository.findOne({ id }, {
                 relations: this._getRelationsParameter(getGroupFilterDto)
@@ -91,7 +90,7 @@ export class GroupsService {
     async deleteUserFromGroup(id: number, userId: number): Promise<Group> {
         try {
             const [ group, user ] = await Promise.all([ 
-                this.getGroupById(id),
+                this.getGroupById(id, { withUsers: true }),
                 this.usersService.getUserById(userId)]
             );
             

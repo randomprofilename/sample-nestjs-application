@@ -40,7 +40,7 @@ export class UsersService {
         }
     }
 
-    async getUserById(id: number, getUserDto?: GetUserFilterDto): Promise<User> {
+    async getUserById(id: number, getUserDto: GetUserFilterDto = {}): Promise<User> {
         try {
             const user = await this.userRepository.findOne(id, { 
                 relations: this._getRelationsParameter(getUserDto)

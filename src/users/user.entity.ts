@@ -1,7 +1,5 @@
 import { BaseEntity, PrimaryGeneratedColumn, Column, Entity, ManyToMany, JoinTable, JoinColumn } from "typeorm";
 import { Group } from "src/groups/group.entity";
-import { group } from "console";
-import { userInfo } from "os";
 
 @Entity()
 export class User extends BaseEntity {

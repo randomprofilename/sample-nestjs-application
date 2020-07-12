@@ -5,5 +5,5 @@ import { StringToBoolTransform } from "src/transforms/string-to-bool.transform";
 export class GetGroupFilterDto {
     @IsOptional()
     @Transform(StringToBoolTransform)
-    withUsers: boolean;
+    withUsers?: boolean;
 }
