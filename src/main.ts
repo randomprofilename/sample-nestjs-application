@@ -4,7 +4,7 @@ import { ValidationPipe, Logger } from '@nestjs/common';
 import * as config from "config";
 
 async function bootstrap() {
-  const serverConfig = config.get('server');
+  const serverConfig = config.get('server') as { port: string };
   const logger = new Logger('bootstrap');
 
   const app = await NestFactory.create(AppModule);
