@@ -1,0 +1,11 @@
+server:
+    port: 3000
+
+db:
+    postgres:
+        type: 'postgres'
+        port: '5432'
+        database: 'usergroupmanagement'
+    mongo:
+        type: 'mongodb'
+        useUnifiedTopology: true

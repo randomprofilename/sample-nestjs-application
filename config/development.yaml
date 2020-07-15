@@ -1,0 +1,9 @@
+db:
+    postgres:
+        host: 'localhost'
+        username: 'postgres'
+        password: 'mysecretpassword'
+        synchronize: true
+    mongo:
+        url: 'mongodb://localhost/logger'
+        synchronize: true
