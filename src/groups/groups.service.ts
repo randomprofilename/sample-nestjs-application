@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException, InternalServerErrorException } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { Group } from './group.entity';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -7,6 +7,7 @@ import { UsersService } from 'src/users/users.service';
 import { GetGroupFilterDto } from './dto/get-group-filter.dto';
 import { LoggerService } from 'src/logger/logger.service';
 import { GroupsModuleName } from 'src/constants';
+import { UpdateGroupDto } from './dto/update-group.dto';
 
 @Injectable()
 export class GroupsService {
@@ -34,9 +35,7 @@ export class GroupsService {
                 message: error.message || `Cannot get groups with data: ${JSON.stringify(getGroupFilterDto)}`,
                 stack: error.stack
             });
-            throw error instanceof NotFoundException ? 
-                error : 
-                new InternalServerErrorException();
+            throw error;
         }
     }
 
@@ -55,9 +54,7 @@ export class GroupsService {
                 message: error.message || `Cannot get group with ${id} and data: ${JSON.stringify(getGroupFilterDto)}`,
                 stack: error.stack
             });
-            throw error instanceof NotFoundException ? 
-                error : 
-                new InternalServerErrorException();
+            throw error;
         }
     }
 
@@ -81,9 +78,7 @@ export class GroupsService {
                 message: error.message || `Cannot add user ${userId} to group ${id}`,
                 stack: error.stack
             });
-            throw error instanceof NotFoundException ? 
-                error : 
-                new InternalServerErrorException();
+            throw error;
         }
     }
 
@@ -106,9 +101,7 @@ export class GroupsService {
                 stack: error.stack
             });
             
-            throw error instanceof NotFoundException ? 
-                error : 
-                new InternalServerErrorException();
+            throw error;
         }
     }
 
@@ -128,9 +121,27 @@ export class GroupsService {
                 stack: error.stack
             });
             
-            throw error instanceof NotFoundException ? 
-                error : 
-                new InternalServerErrorException();
+            throw error;
+        }
+    }
+
+    async updateGroup(id: number, updateGroupDto: UpdateGroupDto): Promise<Group> {
+        const { name } = updateGroupDto;
+        try {
+            const { affected } = await this.groupRepository.update(id, { name });
+            if (affected < 1)
+                throw new NotFoundException();
+
+            return this.groupRepository.findOne(id); 
+        } catch (error) {
+            this.loggerService.error({ 
+                module: GroupsModuleName,
+                component: `${this.constructor.name}.deleteGroup`,
+                message: error.message || `Cannot update group with id ${id}`,
+                stack: error.stack
+            });
+            
+            throw error;
         }
     }
 
@@ -148,9 +159,7 @@ export class GroupsService {
                 stack: error.stack
             });
             
-            throw error instanceof NotFoundException ? 
-                error : 
-                new InternalServerErrorException();
+            throw error;
         }
     }
 }

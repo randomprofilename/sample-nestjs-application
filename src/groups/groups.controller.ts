@@ -1,8 +1,9 @@
-import { Controller, Get, Param, Body, Post, Delete, ParseIntPipe, Query } from '@nestjs/common';
+import { Controller, Get, Param, Body, Post, Delete, ParseIntPipe, Query, Patch } from '@nestjs/common';
 import { GroupsService } from './groups.service';
 import { Group } from './group.entity';
 import { CreateGroupDto } from './dto/create-group.dto';
 import { GetGroupFilterDto } from './dto/get-group-filter.dto';
+import { UpdateGroupDto } from './dto/update-group.dto';
 @Controller('groups')
 export class GroupsController {
     constructor(
@@ -45,6 +46,14 @@ export class GroupsController {
         @Body() createGroupDto: CreateGroupDto
     ): Promise<Group> {
         return this.groupService.createGroup(createGroupDto);
+    }
+
+    @Patch("/:id")
+    updateGroup(
+        @Param("id", ParseIntPipe) id: number,
+        @Body() updateGroupDto: UpdateGroupDto
+    ): Promise<Group> {
+        return this.groupService.updateGroup(id, updateGroupDto);
     }
 
     @Delete("/:id")

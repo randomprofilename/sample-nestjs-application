@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException, ConflictException, InternalServerErrorException } from '@nestjs/common';
+import { Injectable, NotFoundException, ConflictException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './user.entity';
 import { Repository } from 'typeorm';
@@ -6,6 +6,7 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { GetUserFilterDto } from './dto/get-user-filter.dto';
 import { LoggerService } from 'src/logger/logger.service';
 import { UsersModuleName } from 'src/constants';
+import { UpdateUserDto } from './dto/update-user.dto';
 
 @Injectable()
 export class UsersService {
@@ -34,9 +35,7 @@ export class UsersService {
                 stack: error.stack
             });
             
-            throw error instanceof NotFoundException ? 
-                error : 
-                new InternalServerErrorException();
+            throw error;
         }
     }
 
@@ -59,9 +58,7 @@ export class UsersService {
                 stack: error.stack
             });
             
-            throw error instanceof NotFoundException ? 
-                error : 
-                new InternalServerErrorException();
+            throw error;
         }
     }
 
@@ -79,9 +76,27 @@ export class UsersService {
                 stack: error.stack
             });
             
-            throw error instanceof NotFoundException ? 
-                error : 
-                new InternalServerErrorException();
+            throw error;
+        }
+    }
+
+    async updateUser(id: number, updateUserDto: UpdateUserDto): Promise<User> {
+        const { username } = updateUserDto;
+        try {
+            const { affected } = await this.userRepository.update(id, { username });
+            if (affected < 1)
+                throw new NotFoundException();
+
+            return this.userRepository.findOne(id);
+        } catch (error) {
+            this.loggerService.error({ 
+                module: UsersModuleName,
+                component: `${this.constructor.name}.updateUser`,
+                message: error.message || `Cannot updateUser with: ${JSON.stringify(updateUserDto)}`,
+                stack: error.stack
+            });
+            
+            throw error;
         }
     }
 
@@ -99,9 +114,7 @@ export class UsersService {
                 stack: error.stack
             });
             
-            throw error instanceof NotFoundException ? 
-                error : 
-                new InternalServerErrorException();
+            throw error;
         }
     }
 
@@ -130,9 +143,7 @@ export class UsersService {
                 stack: error.stack
             });
             
-            throw (error instanceof NotFoundException || error instanceof ConflictException) ? 
-                error : 
-                new InternalServerErrorException();
+            throw error;
         }
     }
 
@@ -161,9 +172,7 @@ export class UsersService {
                 stack: error.stack
             });
             
-            throw (error instanceof NotFoundException || error instanceof ConflictException) ? 
-                error : 
-                new InternalServerErrorException();
+            throw error;
         }
     }
 }
