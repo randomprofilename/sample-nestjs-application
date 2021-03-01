@@ -6,6 +6,7 @@ db:
         type: 'postgres'
         port: '5432'
         database: 'usergroupmanagement'
+        synchronize: false
     mongo:
         type: 'mongodb'
         useUnifiedTopology: true
