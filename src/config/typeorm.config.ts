@@ -1,4 +1,3 @@
-import { TypeOrmModuleOptions } from "@nestjs/typeorm";
 import { MongoConnectionName } from "src/constants";
 import * as config from 'config';
 import { PostgresConnectionOptions } from "typeorm/driver/postgres/PostgresConnectionOptions";

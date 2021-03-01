@@ -9,6 +9,9 @@ export class User extends BaseEntity {
     @Column()
     username: string;
 
+    @Column({ default: false, name: "is_deleted" })
+    isDeleted: boolean
+
     @ManyToMany(type => Group, group => group.users)
     groups: string[];
 
